@@ -1,0 +1,32 @@
+{
+    "name": "openprovider/http",
+    "type": "library",
+    "description": "Openprovider Http Service",
+    "keywords": [],
+    "homepage": "http://openprovider.eu",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Openprovider",
+            "email": "developers@hosting-concepts.nl"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Openprovider\\Service\\Http\\": "" }
+    },
+    "target-dir": "Openprovider/Service/Http",
+    "require": {
+        "php": ">=5.3.3",
+        "openprovider/helper": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer-repository.hosting-concepts.nl"
+        }
+    ]
+}
