@@ -144,7 +144,7 @@ class Response
     public function isError()
     {
         $str = (string)$this->httpCode;
-        if ($str[0] != '2' && $str[0] != '3' && !$this->getErrorCode()) {
+        if (($str[0] != '2' && $str[0] != '3') || $this->getErrorCode()) {
             return true;
         }
 
