@@ -8,32 +8,32 @@ class Response
     /**
      * @var int
      */
-    private  $httpCode;
+    private $httpCode;
 
     /**
      * @var string
      */
-    private  $raw;
+    private $raw;
 
     /**
      * @var array
      */
-    private  $header;
+    private $header;
 
     /**
      * @var int
      */
-    private  $headerSize;
+    private $headerSize;
 
     /**
      * @var int
      */
-    private  $errorCode;
+    private $errorCode;
 
     /**
      * @var string
      */
-    private  $errorDescription;
+    private $errorDescription;
 
     public function __construct($raw, $httpCode, $headerSize, $errorCode = null, $errorDescription = '')
     {
@@ -42,7 +42,7 @@ class Response
         $this->headerSize = $headerSize;
         $this->header = explode("\n", substr($raw, 0, $headerSize));
         $this->errorCode = $errorCode;
-        $this->errorDescription =  $errorDescription;
+        $this->errorDescription = $errorDescription;
     }
 
     /**
@@ -76,10 +76,16 @@ class Response
                     $cinfo = explode('=', $data);
                     $cinfo[0] = trim($cinfo[0]);
                     $loweredCinfo = strtolower($cinfo[0]);
-                    if($loweredCinfo == 'expires') $cinfo[1] = strtotime($cinfo[1]);
-                    if($loweredCinfo == 'secure') $cinfo[1] = "true";
-                    if($loweredCinfo == 'httponly') $cinfo[1] = "true";
-                    if(in_array($loweredCinfo, array('domain', 'expires', 'path', 'secure', 'comment', 'httponly'))) {
+                    if ($loweredCinfo == 'expires') {
+                        $cinfo[1] = strtotime($cinfo[1]);
+                    }
+                    if ($loweredCinfo == 'secure') {
+                        $cinfo[1] = "true";
+                    }
+                    if ($loweredCinfo == 'httponly') {
+                        $cinfo[1] = "true";
+                    }
+                    if (in_array($loweredCinfo, array('domain', 'expires', 'path', 'secure', 'comment', 'httponly'))) {
                         $cdata[trim($cinfo[0])] = $cinfo[1];
                     } else {
                         $cdata['value']['key'] = $cinfo[0];
@@ -104,10 +110,10 @@ class Response
     public static function cookieFromArray(array $cookie)
     {
         $result = '';
-        foreach($cookie as $value) {
-            $result[] = $value['value']['key'].'='.$value['value']['value'];
+        foreach ($cookie as $value) {
+            $result[] = $value['value']['key'] . '=' . $value['value']['value'];
         }
-        if(is_array($result)) {
+        if (is_array($result)) {
             return trim(implode('; ', $result));
         }
 

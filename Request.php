@@ -37,10 +37,10 @@ class Request
     private $options = array(
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HEADER         => true,
-        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_HEADER => true,
+        CURLOPT_MAXREDIRS => 10,
         CURLOPT_CONNECTTIMEOUT => 30,
-        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_TIMEOUT => 30,
     );
 
     /**
@@ -188,7 +188,7 @@ class Request
     public function setHeaders($headers)
     {
         if (!is_array($headers)) {
-            $headers = (array) $headers;
+            $headers = (array)$headers;
         }
         $this->headers = $headers;
 
@@ -208,7 +208,7 @@ class Request
     /**
      * Set option/options
      *
-     * @param array  $options
+     * @param array $options
      * @return $this
      */
     public function setOptions(array $options)
@@ -236,9 +236,12 @@ class Request
      */
     public function setUserPassword($userPassword)
     {
-        $this->options = ArrayHelper::mergeDeep($this->options, array(
-            CURLOPT_USERPWD => $userPassword
-        ));
+        $this->options = ArrayHelper::mergeDeep(
+            $this->options,
+            array(
+                CURLOPT_USERPWD => $userPassword
+            )
+        );
 
         return $this;
     }
@@ -251,9 +254,12 @@ class Request
      */
     public function setSslVerifyPeer($verify = false)
     {
-        $this->options = ArrayHelper::mergeDeep($this->options, array(
-            CURLOPT_SSL_VERIFYPEER => $verify
-        ));
+        $this->options = ArrayHelper::mergeDeep(
+            $this->options,
+            array(
+                CURLOPT_SSL_VERIFYPEER => $verify
+            )
+        );
 
         return $this;
     }
@@ -269,9 +275,12 @@ class Request
         if (is_array($cookie)) {
             $cookie = Response::cookieFromArray($cookie);
         }
-        $this->options = ArrayHelper::mergeDeep($this->options, array(
-            CURLOPT_COOKIE => $cookie
-        ));
+        $this->options = ArrayHelper::mergeDeep(
+            $this->options,
+            array(
+                CURLOPT_COOKIE => $cookie
+            )
+        );
 
         return $this;
     }
@@ -284,9 +293,12 @@ class Request
      */
     public function setFollowLocation($followLocation = true)
     {
-        $this->options = ArrayHelper::mergeDeep($this->options, array(
-            CURLOPT_FOLLOWLOCATION => $followLocation
-        ));
+        $this->options = ArrayHelper::mergeDeep(
+            $this->options,
+            array(
+                CURLOPT_FOLLOWLOCATION => $followLocation
+            )
+        );
 
         return $this;
     }
@@ -299,9 +311,12 @@ class Request
      */
     public function setMaxRedirs($maxRedirs = 5)
     {
-        $this->options = ArrayHelper::mergeDeep($this->options, array(
-            CURLOPT_MAXREDIRS => $maxRedirs
-        ));
+        $this->options = ArrayHelper::mergeDeep(
+            $this->options,
+            array(
+                CURLOPT_MAXREDIRS => $maxRedirs
+            )
+        );
 
         return $this;
     }
@@ -315,13 +330,19 @@ class Request
     public function setTimeout($timeout = 30)
     {
         if (is_float($timeout)) {
-            $this->options = ArrayHelper::mergeDeep($this->options, array(
-                CURLOPT_TIMEOUT_MS => 1000 * $timeout
-            ));
+            $this->options = ArrayHelper::mergeDeep(
+                $this->options,
+                array(
+                    CURLOPT_TIMEOUT_MS => 1000 * $timeout
+                )
+            );
         } else {
-            $this->options = ArrayHelper::mergeDeep($this->options, array(
-                CURLOPT_TIMEOUT => $timeout
-            ));
+            $this->options = ArrayHelper::mergeDeep(
+                $this->options,
+                array(
+                    CURLOPT_TIMEOUT => $timeout
+                )
+            );
         }
 
         return $this;
@@ -338,7 +359,7 @@ class Request
         if (!$run) {
             return new Response('Ok', 200, 0);
         }
-        $output    = curl_exec($handle);
+        $output = curl_exec($handle);
         $httpCode = @curl_getinfo($handle, CURLINFO_HTTP_CODE);
         $headerSize = @curl_getinfo($handle, CURLINFO_HEADER_SIZE);
         $response = new Response($output, $httpCode, $headerSize, curl_errno($handle), curl_error($handle));
@@ -351,9 +372,9 @@ class Request
     {
         $options = $this->getOptions();
         $options[CURLOPT_URL] = $this->getUrl();
-        $options[CURLOPT_CUSTOMREQUEST]  = $this->getMethod();
+        $options[CURLOPT_CUSTOMREQUEST] = $this->getMethod();
         if ($data = $this->getPostData()) {
-            $options[CURLOPT_POST]       = true;
+            $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $data;
         }
         if ($headers = $this->getHeaders()) {
