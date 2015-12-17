@@ -2,8 +2,6 @@
 
 namespace Openprovider\Service\Http;
 
-use Openprovider\Service\Helper\ArrayHelper;
-
 class Request
 {
     /**
@@ -26,7 +24,13 @@ class Request
     /**
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
+
+    /**
+     * for testing purposes
+     * @var boolean
+     */
+    private $testMode = false;
 
     /**
      * Set of default options to be used with request
@@ -34,14 +38,14 @@ class Request
      *
      * @var array
      */
-    private $options = array(
+    private $options = [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HEADER => true,
         CURLOPT_MAXREDIRS => 10,
         CURLOPT_CONNECTTIMEOUT => 30,
         CURLOPT_TIMEOUT => 30,
-    );
+    ];
 
     /**
      * Init new Request
@@ -213,7 +217,7 @@ class Request
      */
     public function setOptions(array $options)
     {
-        $this->options = ArrayHelper::mergeDeep($this->options, $options);
+        $this->options = self::mergeDeep($this->options, $options);
 
         return $this;
     }
@@ -236,11 +240,11 @@ class Request
      */
     public function setUserPassword($userPassword)
     {
-        $this->options = ArrayHelper::mergeDeep(
+        $this->options = self::mergeDeep(
             $this->options,
-            array(
+            [
                 CURLOPT_USERPWD => $userPassword
-            )
+            ]
         );
 
         return $this;
@@ -254,11 +258,11 @@ class Request
      */
     public function setSslVerifyPeer($verify = false)
     {
-        $this->options = ArrayHelper::mergeDeep(
+        $this->options = self::mergeDeep(
             $this->options,
-            array(
+            [
                 CURLOPT_SSL_VERIFYPEER => $verify
-            )
+            ]
         );
 
         return $this;
@@ -275,11 +279,11 @@ class Request
         if (is_array($cookie)) {
             $cookie = Response::cookieFromArray($cookie);
         }
-        $this->options = ArrayHelper::mergeDeep(
+        $this->options = self::mergeDeep(
             $this->options,
-            array(
+            [
                 CURLOPT_COOKIE => $cookie
-            )
+            ]
         );
 
         return $this;
@@ -293,11 +297,11 @@ class Request
      */
     public function setFollowLocation($followLocation = true)
     {
-        $this->options = ArrayHelper::mergeDeep(
+        $this->options = self::mergeDeep(
             $this->options,
-            array(
+            [
                 CURLOPT_FOLLOWLOCATION => $followLocation
-            )
+            ]
         );
 
         return $this;
@@ -311,11 +315,11 @@ class Request
      */
     public function setMaxRedirs($maxRedirs = 5)
     {
-        $this->options = ArrayHelper::mergeDeep(
+        $this->options = self::mergeDeep(
             $this->options,
-            array(
+            [
                 CURLOPT_MAXREDIRS => $maxRedirs
-            )
+            ]
         );
 
         return $this;
@@ -330,18 +334,18 @@ class Request
     public function setTimeout($timeout = 30)
     {
         if (is_float($timeout)) {
-            $this->options = ArrayHelper::mergeDeep(
+            $this->options = self::mergeDeep(
                 $this->options,
-                array(
+                [
                     CURLOPT_TIMEOUT_MS => 1000 * $timeout
-                )
+                ]
             );
         } else {
-            $this->options = ArrayHelper::mergeDeep(
+            $this->options = self::mergeDeep(
                 $this->options,
-                array(
+                [
                     CURLOPT_TIMEOUT => $timeout
-                )
+                ]
             );
         }
 
@@ -352,11 +356,11 @@ class Request
      * Execute request
      *
      */
-    public function execute($run = true)
+    public function execute()
     {
         $handle = curl_init();
         curl_setopt_array($handle, $this->prepareOptions());
-        if (!$run) {
+        if ($this->testMode) {
             return new Response('Ok', 200, 0);
         }
         $output = curl_exec($handle);
@@ -366,6 +370,18 @@ class Request
         curl_close($handle);
 
         return $response;
+    }
+
+    /**
+     * Used for testing purposes
+     * @param boolean $mode 
+     */
+    public function setTestMode($mode)
+    {
+        if (is_bool($mode)) {
+            $this->testMode = $mode;
+        }
+        return $this;
     }
 
     private function prepareOptions()
@@ -382,5 +398,55 @@ class Request
         }
 
         return $options;
+    }
+
+    /**
+     * Merge two or more arrays together recursively.
+     *
+     * @param array $array ...
+     * @return array
+     */
+    private static function mergeDeep()
+    {
+        $args = func_get_args();
+
+        if (!$args) {
+            return array();
+        }
+        if (sizeof($args) == 1) {
+            return $args[0];
+        }
+
+        $array = array_shift($args);
+
+        while (($otherArray = array_shift($args)) !== null) {
+            $array = self::mergeDeepHelper($array, $otherArray);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Recursively merges two arrays together.
+     *
+     * @param array $array1
+     * @param array|null $array2
+     * @return array
+     */
+    private static function mergeDeepHelper(array $array1, $array2 = null)
+    {
+        if (is_array($array2)) {
+            foreach ($array2 as $key => $val) {
+                if (is_array($array2[$key])) {
+                    $array1[$key] = (array_key_exists($key, $array1) && is_array($array1[$key]))
+                        ? self::mergeDeepHelper($array1[$key], $array2[$key])
+                        : $array2[$key];
+                } else {
+                    $array1[$key] = $val;
+                }
+            }
+        }
+
+        return $array1;
     }
 }
