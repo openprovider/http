@@ -24,8 +24,8 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
         $request->setPostData('data=some_data');
         $this->assertEquals('data=some_data', $request->getPostData());
         $request->setHeaders('Content-type: application/json');
-        $this->assertEquals(array('Content-type: application/json'), $request->getHeaders());
-        $request->setOptions(array (CURLOPT_RETURNTRANSFER => false));
+        $this->assertEquals(['Content-type: application/json'], $request->getHeaders());
+        $request->setOptions([CURLOPT_RETURNTRANSFER => false]);
         $options = $request->getOptions();
         $this->assertFalse($options[CURLOPT_RETURNTRANSFER]);
         $request->setFollowLocation(false);
@@ -46,27 +46,27 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
         $request->setCookie('PREF=ID; Name=Noname');
         $options = $request->getOptions();
         $this->assertEquals('PREF=ID; Name=Noname', $options[CURLOPT_COOKIE]);
-        $request->setCookie(array(
-            array(
-                'value' => array(
+        $request->setCookie([
+            [
+                'value' => [
                     'key' => 'PREF',
                     'value' => 'ID',
-                ),
+                ],
                 'expires' => 1454606942,
                 'path' => '/',
                 'domain' => '.google.ru',
-            ),
-            array(
-                'value' => array(
+            ],
+            [
+                'value' => [
                     'key' => 'NID',
                     'value' => 67,
-                ),
+                ],
                 'expires' => 1407346142,
                 'path' => '/',
                 'domain' => '.google.ru',
                 'HttpOnly' => true,
-            ),
-        ));
+            ],
+        ]);
         $options = $request->getOptions();
         $this->assertEquals('PREF=ID; NID=67', $options[CURLOPT_COOKIE]);
         $newRequest = Request::get('google.com')->setHeaders('Content-type: text/html')->setPostData('a=b&c=d');
@@ -74,7 +74,7 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
         $this->assertEquals('GET', $newRequest->getMethod());
         $this->assertEquals('a=b&c=d', $newRequest->getPostData());
         $this->assertEquals(array('Content-type: text/html'), $newRequest->getHeaders());
-        $dryRunResponse = Request::get('google.com')->execute(false);
+        $dryRunResponse = Request::get('google.com')->setTestMode(true)->execute();
         $this->assertTrue($dryRunResponse->isSuccess());
         $this->assertFalse($dryRunResponse->isError());
         $this->assertEquals(200, $dryRunResponse->getHttpStatusCode());
@@ -86,6 +86,5 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
     {
         $response = Request::get('google.com')->execute();
         $this->assertEquals(200, $response->getHttpStatusCode());
-        $this->assertStringStartsWith('PREF=ID', $response->getCookie());
     }
 }
