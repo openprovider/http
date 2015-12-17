@@ -1,6 +1,6 @@
 <?php
 
-namespace Openprovider\Service\Config\Tests;
+namespace Openprovider\Service\Http\Tests;
 
 use Openprovider\Service\Http\Request;
 
