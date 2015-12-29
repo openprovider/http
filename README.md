@@ -7,7 +7,7 @@ A simple HTTP PHP library based on Curl, which helps to create HTTP request and 
 
 ### Current version
 
-1.0.5
+1.0.6
 
 ### Examples
 
