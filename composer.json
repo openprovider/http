@@ -2,17 +2,19 @@
   "name": "openprovider/http",
   "type": "library",
   "description": "Openprovider Http Service",
+  "homepage": "http://openprovider.eu",
+  "license": "MIT",
   "authors": [
     {
       "name": "Openprovider",
-      "email": "developers@hosting-concepts.nl"
+      "email": "dev@openprovider.com"
     }
   ],
   "require": {
     "php": ">=5.4.37"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "5.1.*"
   },
   "suggest": {
     "ext-curl": "Required for http connections"
@@ -21,11 +23,5 @@
     "psr-4": {
       "": "src/"
     }
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://composer-repository.hosting-concepts.nl"
-    }
-  ]
+  }
 }

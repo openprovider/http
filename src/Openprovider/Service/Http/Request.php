@@ -1,9 +1,19 @@
 <?php
+// Copyright 2015 Openprovider Authors. All rights reserved.
+// Use of this source code is governed by a license
+// that can be found in the LICENSE file.
 
 namespace Openprovider\Service\Http;
 
 class Request
 {
+    const GET = 'GET';
+    const POST = 'POST';
+    const PUT = 'PUT';
+    const DELETE = 'DELETE';
+    const OPTIONS = 'OPTIONS';
+    const HEAD = 'HEAD';
+
     /**
      * @var string
      */
@@ -54,7 +64,7 @@ class Request
      * @param string $method
      * @param mixed|null $data
      */
-    public function __construct($url, $method = 'GET', $data = null)
+    public function __construct($url, $method = Request::GET, $data = null)
     {
         $this->setUrl($url);
         $this->setMethod($method);
@@ -81,7 +91,7 @@ class Request
      */
     public static function post($url, $data)
     {
-        return new self($url, 'POST', $data);
+        return new self($url, Request::POST, $data);
     }
 
     /**
@@ -93,19 +103,40 @@ class Request
      */
     public static function put($url, $data)
     {
-        return new self($url, 'PUT', $data);
+        return new self($url, Request::PUT, $data);
     }
 
     /**
      * Perform DELETE request with new instance
      *
      * @param $url
-     * @param $data
      * @return Request
      */
     public static function delete($url)
     {
-        return new self($url, 'DELETE');
+        return new self($url, Request::DELETE);
+    }
+
+    /**
+     * Perform HEAD request with new instance
+     *
+     * @param $url
+     * @return Request
+     */
+    public static function head($url)
+    {
+        return new self($url, Request::HEAD);
+    }
+
+    /**
+     * Perform OPTIONS request with new instance
+     *
+     * @param $url
+     * @return Request
+     */
+    public static function options($url)
+    {
+        return new self($url, Request::OPTIONS);
     }
 
     /**
@@ -142,8 +173,8 @@ class Request
      */
     public function setMethod($method)
     {
-        if (!preg_match('#^GET|POST|PUT|DELETE$#', $method)) {
-            $method = 'GET';
+        if (!preg_match('#^GET|POST|PUT|DELETE|HEAD|OPTIONS$#', $method)) {
+            $method = Request::GET;
         }
         $this->method = $method;
 
@@ -151,7 +182,7 @@ class Request
     }
 
     /**
-     * Get method of request (GET, POST, PUT, DELETE)
+     * Get method of request (GET, POST, PUT, DELETE, HEAD, OPTIONS)
      *
      * @return string
      */

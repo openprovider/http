@@ -14,13 +14,13 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://github.com/', $request->getUrl());
         $request->setUrl('http://github.com/');
         $this->assertEquals('http://github.com/', $request->getUrl());
-        $request->setMethod('POST');
-        $this->assertEquals('POST', $request->getMethod());
-        $request->setMethod('DELETE');
-        $this->assertEquals('DELETE', $request->getMethod());
+        $request->setMethod(Request::POST);
+        $this->assertEquals(Request::POST, $request->getMethod());
+        $request->setMethod(Request::DELETE);
+        $this->assertEquals(Request::DELETE, $request->getMethod());
         // test for incorrect method
         $request->setMethod('POT');
-        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals(Request::GET, $request->getMethod());
         $request->setPostData('data=some_data');
         $this->assertEquals('data=some_data', $request->getPostData());
         $request->setHeaders('Content-type: application/json');
