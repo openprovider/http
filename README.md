@@ -1,11 +1,13 @@
 Openprovider HTTP Library
 =========================
 
+[![Build Status](https://travis-ci.org/openprovider/http.png?branch=master)](https://travis-ci.org/openprovider/http)
+
 A simple HTTP PHP library based on Curl, which helps to create HTTP request and get convenient response.
 
 ### Current version
 
-1.0.2
+1.0.3
 
 ### Examples
 
