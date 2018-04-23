@@ -43,6 +43,9 @@ class RequestTestCase  extends \PHPUnit_Framework_TestCase
         $request->setTimeout(1.5);
         $options = $request->getOptions();
         $this->assertEquals(1500, $options[CURLOPT_TIMEOUT_MS]);
+        $request->setEncoding(Request::ENCODING_GZIP);
+        $options = $request->getOptions();
+        $this->assertEquals('gzip', $options[CURLOPT_ENCODING]);
         $request->setCookie('PREF=ID; Name=Noname');
         $options = $request->getOptions();
         $this->assertEquals('PREF=ID; Name=Noname', $options[CURLOPT_COOKIE]);
