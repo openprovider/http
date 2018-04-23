@@ -1,5 +1,5 @@
 <?php
-// Copyright 2015 Openprovider Authors. All rights reserved.
+// Copyright 2018 Openprovider Authors. All rights reserved.
 // Use of this source code is governed by a license
 // that can be found in the LICENSE file.
 
@@ -7,12 +7,20 @@ namespace Openprovider\Service\Http;
 
 class Request
 {
+    /**
+     * Available http methods
+     */
     const GET = 'GET';
     const POST = 'POST';
     const PUT = 'PUT';
     const DELETE = 'DELETE';
     const OPTIONS = 'OPTIONS';
     const HEAD = 'HEAD';
+
+    /**
+     * Available http request encodings
+     */
+    const ENCODING_GZIP = 'gzip';
 
     /**
      * @var string
@@ -55,6 +63,7 @@ class Request
         CURLOPT_MAXREDIRS => 10,
         CURLOPT_CONNECTTIMEOUT => 30,
         CURLOPT_TIMEOUT => 30,
+        CURLOPT_ENCODING => '',
     ];
 
     /**
@@ -384,6 +393,24 @@ class Request
     }
 
     /**
+     * Set Encoding option
+     *
+     * @param string $encoding
+     * @return $this
+     */
+    public function setEncoding($encoding = '')
+    {
+        $this->options = self::mergeDeep(
+            $this->options,
+            [
+                CURLOPT_ENCODING => $encoding
+            ]
+        );
+
+        return $this;
+    }
+
+    /**
      * Execute request
      *
      */
@@ -405,7 +432,9 @@ class Request
 
     /**
      * Used for testing purposes
-     * @param boolean $mode 
+     *
+     * @param boolean $mode
+     * @return $this
      */
     public function setTestMode($mode)
     {
