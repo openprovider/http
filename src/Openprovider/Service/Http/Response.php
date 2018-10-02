@@ -1,5 +1,5 @@
 <?php
-// Copyright 2015 Openprovider Authors. All rights reserved.
+// Copyright 2018 Openprovider Authors. All rights reserved.
 // Use of this source code is governed by a license
 // that can be found in the LICENSE file.
 
@@ -109,18 +109,16 @@ class Response
      * Convert cookie from array to string
      *
      * @param array $cookie
+     * @return string
      */
     public static function cookieFromArray(array $cookie)
     {
-        $result = '';
+        $result = [];
         foreach ($cookie as $value) {
             $result[] = $value['value']['key'] . '=' . $value['value']['value'];
         }
-        if (is_array($result)) {
-            return trim(implode('; ', $result));
-        }
 
-        return $result;
+        return trim(implode('; ', $result));
     }
 
     /**
