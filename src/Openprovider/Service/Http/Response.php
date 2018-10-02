@@ -113,15 +113,12 @@ class Response
      */
     public static function cookieFromArray(array $cookie)
     {
-        $result = '';
+        $result = [];
         foreach ($cookie as $value) {
             $result[] = $value['value']['key'] . '=' . $value['value']['value'];
         }
-        if (is_array($result)) {
-            return trim(implode('; ', $result));
-        }
 
-        return $result;
+        return trim(implode('; ', $result));
     }
 
     /**
