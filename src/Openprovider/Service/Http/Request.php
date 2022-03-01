@@ -309,6 +309,27 @@ class Request
     }
 
     /**
+     * Set SSL certificates
+     *
+     * @param null $caPath
+     * @param null $certPath
+     * @param null $keyPath
+     * @return $this
+     */
+    public function setSslCerts($caPath = null, $certPath = null, $keyPath = null)
+    {
+        $options = [
+            CURLOPT_CAINFO => $caPath,
+            CURLOPT_CERTINFO => $certPath,
+            CURLOPT_SSLKEY => $keyPath
+        ];
+
+        $this->options = self::mergeDeep($this->options, array_filter($options));
+
+        return $this;
+    }
+
+    /**
      * Set Cookie option
      *
      * @param string|array $cookie
