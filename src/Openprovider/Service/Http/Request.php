@@ -16,6 +16,7 @@ class Request
     const DELETE = 'DELETE';
     const OPTIONS = 'OPTIONS';
     const HEAD = 'HEAD';
+    const PATCH = 'PATCH';
 
     /**
      * Available http request encodings
@@ -28,12 +29,12 @@ class Request
     private $url;
 
     /**
-     * @var string ( GET/POST/PUT/DELETE )
+     * @var string ( GET/POST/PUT/DELETE/PATCH )
      */
     private $method;
 
     /**
-     * Data to be used with POST/PUT requests
+     * Data to be used with POST/PUT/PATCH requests
      *
      * @var mixed|null
      */
@@ -116,6 +117,18 @@ class Request
     }
 
     /**
+     * Perform PATCH request with new instance
+     *
+     * @param $url
+     * @param $data
+     * @return Request
+     */
+    public static function patch($url, $data)
+    {
+        return new self($url, Request::PATCH, $data);
+    }
+
+    /**
      * Perform DELETE request with new instance
      *
      * @param $url
@@ -182,7 +195,7 @@ class Request
      */
     public function setMethod($method)
     {
-        if (!preg_match('#^GET|POST|PUT|DELETE|HEAD|OPTIONS$#', $method)) {
+        if (!preg_match('#^GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS$#', $method)) {
             $method = Request::GET;
         }
         $this->method = $method;
@@ -191,7 +204,7 @@ class Request
     }
 
     /**
-     * Get method of request (GET, POST, PUT, DELETE, HEAD, OPTIONS)
+     * Get method of request (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS)
      *
      * @return string
      */
@@ -201,7 +214,7 @@ class Request
     }
 
     /**
-     * Set data to be applied to POST/PUT requests
+     * Set data to be applied to POST/PUT/PATCH requests
      *
      * @param mixed $data
      * @return $this
